@@ -5,6 +5,8 @@
 
 import os
 from pyltp import Segmentor,Postagger,Parser,NamedEntityRecognizer,SementicRoleLabeller
+
+
 class LtpParser:
     def __init__(self):
         # ltp 模型路径
@@ -43,7 +45,7 @@ class LtpParser:
         roles_dict={}
 
         for role in roles:
-            roles_dict[role.index]={arg.name:[arg.name,arg.range.start,arg.range.end] for arg in roles.arguments}
+            roles_dict[role.index]={arg.name:[arg.name,arg.range.start,arg.range.end] for arg in role.arguments}
         return roles_dict
 
     def build_parse_child_dict(self,words,postags,arcs):
@@ -70,3 +72,29 @@ class LtpParser:
         rely_id=[arc.head for arc in arcs] # 提取依存父节点id
         relation=[arc.relation for arc in arcs]
         heads=['Root' if id==0 else words[id-1] for id in rely_id]
+
+        for i in range(len(words)):
+            a=[relation[i],words[i],i,postags[i],heads[i],rely_id[i]-1,postags[rely_id[i]-1]]
+            format_parse_list.append(a)
+        return child_dict_list,format_parse_list
+
+    '''parser主函数'''
+
+    def parser_main(self, sentence):
+        words = list(self.segmentor.segment(sentence))
+        postags = list(self.postagger.postag(words))
+        arcs = self.parser.parse(words, postags)
+        child_dict_list, format_parse_list = self.build_parse_child_dict(words, postags, arcs)
+        roles_dict = self.format_label_role(words, postags)
+        return words, postags, child_dict_list, roles_dict, format_parse_list
+
+
+if __name__ == '__main__':
+    parse=LtpParser()
+    sentence="李克强总理今天来我家了，我感到非常荣幸"
+    words, postags, child_dict_list, roles_dict, format_parse_list =parse.parser_main(sentence)
+    print(words,len(words))
+    print(postags,len(postags))
+    print(child_dict_list,len(child_dict_list))
+    print(roles_dict)
+    print(format_parse_list,len(format_parse_list))
