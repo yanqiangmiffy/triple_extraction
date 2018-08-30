@@ -30,3 +30,6 @@ svos [['一个年轻女士', '遭遇', '三个壮汉纠缠'], ['网文当中', '
 
 ## 来自
 https://github.com/liuhuanyong/EventTriplesExtraction/blob/master/sentence_parser.py
+
+## 相关
+https://www.one-tab.com/page/PTmd5qtfS3mG_m_fBdv1zA
