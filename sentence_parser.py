@@ -14,7 +14,8 @@ class LtpParser:
 
         # 分词模型
         self.segmentor=Segmentor()
-        self.segmentor.load(os.path.join(LTP_DATA_DIR,'cws.model'))
+        self.segmentor.load_with_lexicon(os.path.join(LTP_DATA_DIR,'cws.model'),'ltp_data/lexicon.txt')
+        # self.segmentor.load(os.path.join(LTP_DATA_DIR,'cws.model'))
 
         # 词性标注模型
         self.postagger=Postagger()
